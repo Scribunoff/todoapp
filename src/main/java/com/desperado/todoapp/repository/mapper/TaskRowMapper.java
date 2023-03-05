@@ -28,10 +28,6 @@ public class TaskRowMapper {
                 task.setMark(resultSet.getString("mark"));
                 task.setDescription(resultSet.getString("description"));
                 task.setStatus(Status.valueOf(resultSet.getString("status")));
-//                Timestamp timestamp = resultSet.getTimestamp("task_expiration_date");
-//                if (timestamp != null) {
-//                    task.setExpirationDate(timestamp.toLocalDateTime());
-//                }
                 taskList.add(task);
             }
         }

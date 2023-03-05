@@ -1,13 +1,12 @@
 package com.desperado.todoapp.repository.impl;
 
+import com.desperado.todoapp.exception.ResourceMappingException;
 import com.desperado.todoapp.model.Task;
 import com.desperado.todoapp.repository.DataSourceConfig;
 import com.desperado.todoapp.repository.TaskRepository;
 import com.desperado.todoapp.repository.mapper.TaskRowMapper;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -56,7 +55,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                 return TaskRowMapper.mapRows(resultSet);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error while finding tasks");
+            throw new ResourceMappingException("Error while finding tasks");
         }
     }
 
@@ -82,18 +81,11 @@ public class TaskRepositoryImpl implements TaskRepository {
 
             preparedStatement.setString(4, task.getStatus().toString());
 
-//            if (task.getExpirationDate() == null) {
-//                preparedStatement.setNull(5, Types.TIMESTAMP);
-//            } else {
-//                preparedStatement.setTimestamp(5, Timestamp.valueOf(task.getExpirationDate()));
-//            }
-
-
             preparedStatement.setLong(5, task.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error while updating task");
+            throw new ResourceMappingException("Error while updating task");
         }
 
     }
@@ -121,12 +113,6 @@ public class TaskRepositoryImpl implements TaskRepository {
 
             preparedStatement.setString(4, task.getStatus().name());
 
-//            if (task.getExpirationDate() == null) {
-//                preparedStatement.setNull(5, Types.TIMESTAMP);
-//            } else {
-//                preparedStatement.setTimestamp(5, Timestamp.valueOf(task.getExpirationDate()));
-//            }
-
             preparedStatement.executeUpdate();
 
             try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
@@ -135,7 +121,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error while creating task");
+            throw new ResourceMappingException("Error while creating task");
         }
 
     }
@@ -149,7 +135,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error while deleting task");
+            throw new ResourceMappingException("Error while deleting task");
         }
     }
 }
